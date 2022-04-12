@@ -7,14 +7,14 @@ Unreal engine unity style input
 
 
 
-# How to initialize? 如何初始化？:
+# How to initialize? 初始化:
 
 ```
 UsInput::ReleasedStateRestore();
 UsInput::Instance()->InitializeInput(contextObject);
 ```
 
-# How to release? 如何释放？:
+# How to release? 释放:
 
 ```
 UsInput::Instance()->ReleaseInput();
@@ -22,7 +22,7 @@ UsInput::Release();
 ```
 
 
-# How to use? 如何使用？:
+# How to use? 如何用？:
 
 ```
 //Button:
@@ -35,8 +35,8 @@ FKey key = ...
 float axisValue = UsInput::Instance()->AxisValue(key);
 ```
 
-# Other Tips 其他提示:
-## 1. ASCII KeyCode转FKey
+# Other Tips:
+## 1. KeyCode Convert to FKey ASCII KeyCode转FKey
 
 
 KeyCode已经做成常量放在头文件中，Unity使用小写字母作为A-Z的KeyCode，而UE需要大写，头文件中已做该修改。
@@ -45,7 +45,7 @@ KeyCode已经做成常量放在头文件中，Unity使用小写字母作为A-Z�
 
 
 
-## 2. 如何取到需要的FKey
+## 2. How to get FKey? 如何取到需要的FKey?
 
 
 用UE的`EKeys`，如：`EKeys::A`。然后做参数传入UsInput直接可以拿到具体值。
