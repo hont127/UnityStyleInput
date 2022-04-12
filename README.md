@@ -3,7 +3,7 @@ Unreal engine unity style input
 在UE4中使用类似Unity Input.cs风格的输入API。
 
 
-因为走绑定Action的逻辑太麻烦，很多时候不需要绑定，因此写了这个工具。
+因为每次走绑定Action的逻辑太麻烦，很多时候处理输入不需要绑定，写了这个工具。
 
 
 
