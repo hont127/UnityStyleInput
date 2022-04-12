@@ -5,7 +5,9 @@ Unreal engine unity style input
 
 因为走绑定Action的逻辑太麻烦，很多时候不需要绑定，因此写了这个工具。
 
-#How to initialize? 如何初始化？:
+
+
+# How to initialize? 如何初始化？:
 
 ```
 UsInput::ReleasedStateRestore();
