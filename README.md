@@ -29,3 +29,11 @@ if(UsInput::Instance()->IsPress(KEYCODE_SPACE)){
 FKey key = ...
 float axisValue = UsInput::Instance()->AxisValue(key);
 ```
+
+#Other Tips 其他提示:
+##1. ASCII KeyCode转FKey
+KeyCode已经做成常量放在头文件中，Unity用的是小写字母作为ASCII Code，UE需要大写的，
+然后使用接口`FInputKeyManager::Get().GetKeyFromCodes(keycode, charCode);`
+
+##2. 如何取到需要的FKey
+用EKeys，如：EKeys::A。然后做参数传入UsInput直接可以拿到具体值。
