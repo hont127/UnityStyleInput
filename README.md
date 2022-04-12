@@ -40,7 +40,7 @@ float axisValue = UsInput::Instance()->AxisValue(key);
 
 
 KeyCode已经做成常量放在头文件中，Unity使用小写字母作为A-Z的KeyCode，而UE需要大写，头文件中已做该修改。
-然后使用接口`FInputKeyManager::Get().GetKeyFromCodes(keycode, charCode);`
+然后使用UE的接口`FInputKeyManager::Get().GetKeyFromCodes(keycode, charCode);`
 
 
 
@@ -48,4 +48,4 @@ KeyCode已经做成常量放在头文件中，Unity使用小写字母作为A-Z�
 ## 2. 如何取到需要的FKey
 
 
-用EKeys，如：`EKeys::A`。然后做参数传入UsInput直接可以拿到具体值。
+用UE的`EKeys`，如：`EKeys::A`。然后做参数传入UsInput直接可以拿到具体值。
