@@ -1,14 +1,15 @@
 # UnityStyleInput
 Unreal engine unity style input
+在UE4中使用类似Unity Input.cs风格的输入API。
 
-#Init:
+#How to initialize? 如何初始化？:
 
 ```
 UsInput::ReleasedStateRestore();
 UsInput::Instance()->InitializeInput(contextObject);
 ```
 
-#Release:
+#How to release? 如何释放？:
 
 ```
 UsInput::Instance()->ReleaseInput();
@@ -16,7 +17,7 @@ UsInput::Release();
 ```
 
 
-#Use:
+#How to use? 如何使用？:
 
 ```
 //Button:
