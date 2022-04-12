@@ -48,4 +48,4 @@ KeyCode已经做成常量放在头文件中，Unity用的是小写字母作为AS
 ## 2. 如何取到需要的FKey
 
 
-用EKeys，如：EKeys::A。然后做参数传入UsInput直接可以拿到具体值。
+用EKeys，如：`EKeys::A`。然后做参数传入UsInput直接可以拿到具体值。
