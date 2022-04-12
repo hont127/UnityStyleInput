@@ -39,7 +39,7 @@ float axisValue = UsInput::Instance()->AxisValue(key);
 ## 1. ASCII KeyCode转FKey
 
 
-KeyCode已经做成常量放在头文件中，Unity用的是小写字母作为ASCII Code，UE需要大写的，
+KeyCode已经做成常量放在头文件中，Unity使用小写字母作为A-Z的KeyCode，而UE需要大写，头文件中已做该修改。
 然后使用接口`FInputKeyManager::Get().GetKeyFromCodes(keycode, charCode);`
 
 
