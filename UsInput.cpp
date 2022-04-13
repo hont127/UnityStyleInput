@@ -44,7 +44,12 @@ void UsInput::InitializeInput(const AActor* contextObject)
 
 				AxisBinding.AxisDelegate.GetDelegateForManualSet().BindLambda([=](float Value)
 					{
-						mAxisMap[currentKey.GetFName()] = Value;
+						float oldValue = mAxisMap[currentKey.GetFName()];
+
+						if (!FMath::IsNearlyEqual(Value, oldValue, 0.0001f)) {
+							mAxisMap[currentKey.GetFName()] = Value;
+							AxisEventCallback(currentKey);
+						}
 					});
 				mInputComponent->AxisBindings.Add(MoveTemp(AxisBinding));
 			}
@@ -63,6 +68,7 @@ void UsInput::InitializeInput(const AActor* contextObject)
 				ABPressed.ActionDelegate.GetDelegateWithKeyForManualSet().BindLambda([=](const FKey& Key)
 					{
 						mIsPressMap[Key.GetFName()] = true;
+						ButtonEventCallback(Key);
 					});
 				mInputComponent->AddActionBinding(MoveTemp(ABPressed));
 
@@ -84,6 +90,16 @@ void UsInput::InitializeInput(const AActor* contextObject)
 void UsInput::ReleaseInput()
 {
 	mInputComponent = nullptr;
+}
+
+void UsInput::SetButtonEventCallback(void(*pf)(const FKey&))
+{
+	pfButtonEventDelegate = pf;
+}
+
+void UsInput::SetAxisEventCallback(void(*pf)(const FKey&))
+{
+	pfAxisEventDelegate = pf;
 }
 
 bool UsInput::IsPress(const int keyCode)
@@ -109,4 +125,18 @@ float UsInput::AxisValue(const FKey& key)
 	}
 
 	return mAxisMap[key.GetFName()];
+}
+
+void UsInput::ButtonEventCallback(const FKey& key)
+{
+	if (pfButtonEventDelegate != nullptr) {
+		pfButtonEventDelegate(key);
+	}
+}
+
+void UsInput::AxisEventCallback(const FKey& key)
+{
+	if (pfAxisEventDelegate != nullptr) {
+		pfAxisEventDelegate(key);
+	}
 }
