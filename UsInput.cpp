@@ -90,6 +90,9 @@ void UsInput::InitializeInput(const AActor* contextObject)
 void UsInput::ReleaseInput()
 {
 	mInputComponent = nullptr;
+
+	mIsPressMap.Empty();
+	mAxisMap.Empty();
 }
 
 void UsInput::SetButtonEventCallback(void(*pf)(const FKey&))
