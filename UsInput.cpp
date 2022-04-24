@@ -90,9 +90,6 @@ void UsInput::InitializeInput(const AActor* contextObject)
 void UsInput::ReleaseInput()
 {
 	mInputComponent = nullptr;
-
-	mIsPressMap.Empty();
-	mAxisMap.Empty();
 }
 
 void UsInput::SetButtonEventCallback(void(*pf)(const FKey&))
@@ -105,14 +102,13 @@ void UsInput::SetAxisEventCallback(void(*pf)(const FKey&))
 	pfAxisEventDelegate = pf;
 }
 
-bool UsInput::IsPress(const int keyCode)
+bool UsInput::IsPress(const uint32 keyCode) const
 {
-	FKey key = FInputKeyManager::Get().GetKeyFromCodes(keyCode, 0);
-
+	FKey key = FInputKeyManager::Get().GetKeyFromCodes(keyCode, keyCode);
 	return IsPress(key);
 }
 
-bool UsInput::IsPress(const FKey& key)
+bool UsInput::IsPress(const FKey& key) const
 {
 	if (!mIsPressMap.Contains(key.GetFName())) {
 		return false;
@@ -121,7 +117,7 @@ bool UsInput::IsPress(const FKey& key)
 	return mIsPressMap[key.GetFName()];
 }
 
-float UsInput::AxisValue(const FKey& key)
+float UsInput::AxisValue(const FKey& key) const
 {
 	if (!mAxisMap.Contains(key.GetFName())) {
 		return 0.0;
@@ -130,14 +126,14 @@ float UsInput::AxisValue(const FKey& key)
 	return mAxisMap[key.GetFName()];
 }
 
-void UsInput::ButtonEventCallback(const FKey& key)
+void UsInput::ButtonEventCallback(const FKey& key) const
 {
 	if (pfButtonEventDelegate != nullptr) {
 		pfButtonEventDelegate(key);
 	}
 }
 
-void UsInput::AxisEventCallback(const FKey& key)
+void UsInput::AxisEventCallback(const FKey& key) const
 {
 	if (pfAxisEventDelegate != nullptr) {
 		pfAxisEventDelegate(key);
