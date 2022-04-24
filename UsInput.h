@@ -199,8 +199,8 @@ private:
     void (*pfButtonEventDelegate)(const FKey&) = nullptr;
     void (*pfAxisEventDelegate)(const FKey&) = nullptr;
 
-    void ButtonEventCallback(const FKey& key);
-    void AxisEventCallback(const FKey& key);
+    void ButtonEventCallback(const FKey& key) const;
+    void AxisEventCallback(const FKey& key) const;
 
 public:
 
@@ -210,9 +210,9 @@ public:
     void SetButtonEventCallback(void (*pf)(const FKey&));
     void SetAxisEventCallback(void (*pf)(const FKey&));
 
-    bool IsPress(const int keyCode);
-    bool IsPress(const FKey& key);
-    float AxisValue(const FKey& key);
+    bool IsPress(const uint32 keyCode) const;
+    bool IsPress(const FKey& key) const;
+    float AxisValue(const FKey& key) const;
 };
 
 bool UsInput::sIsReleased = false;
