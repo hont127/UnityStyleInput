@@ -1,6 +1,6 @@
 #include "../Public/UsInput.h"
 
-void UsInput::InitializeInput(const AActor* contextObject)
+void UsInput::InitializeInput(const UObject* contextObject)
 {
 	APlayerController* PC = UGameplayStatics::GetPlayerController(contextObject, 0);
 	if (PC) {
