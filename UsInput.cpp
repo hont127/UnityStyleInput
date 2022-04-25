@@ -1,11 +1,11 @@
 #include "../Public/UsInput.h"
 
-void UsInput::InitializeInput(const UObject* contextObject)
+void UsInput::InitializeInput(UObject* contextObject)
 {
 	APlayerController* PC = UGameplayStatics::GetPlayerController(contextObject, 0);
 	if (PC) {
 
-		mInputComponent = NewObject<UInputComponent>(UInputSettings::GetDefaultInputComponentClass());
+		mInputComponent = NewObject<UInputComponent>(contextObject, UInputSettings::GetDefaultInputComponentClass());
 		mInputComponent->Priority = 10;
 
 		PC->PushInputComponent(mInputComponent);
