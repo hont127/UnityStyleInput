@@ -154,7 +154,7 @@
 #define KEYCODE_MENU 319
 #pragma endregion
 
-class UsInput {
+class UsInput final {
 
 public:
 
@@ -204,7 +204,7 @@ private:
 
 public:
 
-    void InitializeInput(const AActor* contextObject);
+    void InitializeInput(const UObject* contextObject);
     void ReleaseInput();
 
     void SetButtonEventCallback(void (*pf)(const FKey&));
