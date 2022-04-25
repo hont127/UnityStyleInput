@@ -194,6 +194,7 @@ private:
 private:
     TMap<FName, bool> mIsPressMap;
     TMap<FName, float> mAxisMap;
+
     UInputComponent* mInputComponent;
 
     void (*pfButtonEventDelegate)(const FKey&) = nullptr;
@@ -203,8 +204,7 @@ private:
     void AxisEventCallback(const FKey& key) const;
 
 public:
-
-    void InitializeInput(const UObject* contextObject);
+    void InitializeInput(UObject* contextObject);
     void ReleaseInput();
 
     void SetButtonEventCallback(void (*pf)(const FKey&));
