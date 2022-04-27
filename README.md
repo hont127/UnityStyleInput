@@ -9,14 +9,14 @@ Unreal engine unity style input
 
 # How to initialize? :
 
-```
+``` c++
 UsInput::ReleasedStateRestore();
 UsInput::Instance()->InitializeInput(contextObject);
 ```
 
 # How to release?:
 
-```
+``` c++
 UsInput::Instance()->ReleaseInput();
 UsInput::Release();
 ```
@@ -24,7 +24,7 @@ UsInput::Release();
 
 # How to use? :
 
-```
+``` c++
 //Button:
 if(UsInput::Instance()->IsPress(KEYCODE_SPACE)){
 	//...
