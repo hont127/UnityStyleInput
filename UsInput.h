@@ -203,17 +203,17 @@ private:
 	void (*PfButtonEventDelegate)(const FKey&) = nullptr;
 	void (*PfAxisEventDelegate)(const FKey&) = nullptr;
 
-	void ButtonEventCallback(const FKey& key) const
+	void ButtonEventCallback(const FKey& Key) const
 	{
 		if (PfButtonEventDelegate != nullptr) {
-			PfButtonEventDelegate(key);
+			PfButtonEventDelegate(Key);
 		}
 	}
 
-	void AxisEventCallback(const FKey& key) const
+	void AxisEventCallback(const FKey& Key) const
 	{
 		if (PfAxisEventDelegate != nullptr) {
-			PfAxisEventDelegate(key);
+			PfAxisEventDelegate(Key);
 		}
 	}
 
