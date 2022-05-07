@@ -11,13 +11,13 @@ Unreal engine unity style input
 
 ``` c++
 UsInput::ReleasedStateRestore();
-UsInput::Instance()->InitializeInput(contextObject);
+UsInput::Get()->InitializeInput(ContextObject);
 ```
 
 # How to release?:
 
 ``` c++
-UsInput::Instance()->ReleaseInput();
+UsInput::Get()->ReleaseInput();
 UsInput::Release();
 ```
 
@@ -26,13 +26,13 @@ UsInput::Release();
 
 ``` c++
 //Button:
-if(UsInput::Instance()->IsPress(KEYCODE_SPACE)){
+if(UsInput::Get()->IsPress(KEYCODE_SPACE)){
 	//...
 }
 
 //Axis:
-FKey key = ...
-float axisValue = UsInput::Instance()->AxisValue(key);
+FKey Key = ...
+float axisValue = UsInput::Get()->AxisValue(Key);
 ```
 
 # Other Tips:
@@ -42,7 +42,7 @@ The KeyCode has been made into a constant and placed in the header file. Unity u
 Then use UE's interface `FInputKeyManager::Get().GetKeyFromCodes(keycode, charCode);`
 
 KeyCode已经做成常量放在头文件中，Unity使用小写字母作为A-Z的KeyCode，而UE需要大写，头文件中已做该修改。
-然后使用UE的接口`FInputKeyManager::Get().GetKeyFromCodes(keycode, charCode);`
+然后使用UE的接口`FInputKeyManager::Get().GetKeyFromCodes(Keycode, CharCode);`
 
 
 
