@@ -1,3 +1,5 @@
+// Copyright Hont, Inc. All Rights Reserved.
+
 #pragma once
 
 #include "CoreMinimal.h"
@@ -154,146 +156,147 @@
 #define KEYCODE_MENU 319
 #pragma endregion
 
+/** Unity style Input Tool */
 class UsInput final {
 
 public:
 
-    static UsInput* Instance() {
+	static UsInput* Get() {
 
-        if (sIsReleased) return nullptr;
+		if (bIsReleased) return nullptr;
 
-        if (sInstance == nullptr) {
-            sInstance = CreateInstance();
-        }
-        return sInstance;
-    }
+		if (Instance == nullptr) {
+			Instance = CreateInstance();
+		}
+		return Instance;
+	}
 
-    static void ReleasedStateRestore() {
-        sIsReleased = false;
-    }
+	static void ReleasedStateRestore() {
+		bIsReleased = false;
+	}
 
-    static void Release() {
-        if (sInstance != nullptr) {
-            delete sInstance;
-            sInstance = nullptr;
-            sIsReleased = true;
-        }
-    }
-
-private:
-    static UsInput* CreateInstance() {
-        UsInput* result = new UsInput();
-
-        return result;
-    }
-
-private:
-    static UsInput* sInstance;
-    static bool sIsReleased;
-
-private:
-    TMap<FName, bool> mIsPressMap;
-    TMap<FName, float> mAxisMap;
-
-    UInputComponent* mInputComponent;
-
-    void (*pfButtonEventDelegate)(const FKey&) = nullptr;
-    void (*pfAxisEventDelegate)(const FKey&) = nullptr;
-
-    void ButtonEventCallback(const FKey& key) const
-	{
-		if (pfButtonEventDelegate != nullptr) {
-			pfButtonEventDelegate(key);
+	static void Release() {
+		if (Instance != nullptr) {
+			delete Instance;
+			Instance = nullptr;
+			bIsReleased = true;
 		}
 	}
 
-    void AxisEventCallback(const FKey& key) const
+private:
+	static UsInput* CreateInstance() {
+		UsInput* result = new UsInput();
+
+		return result;
+	}
+
+private:
+	static UsInput* Instance;
+	static bool bIsReleased;
+
+private:
+	TMap<FName, bool> IsPressMap;
+	TMap<FName, float> AxisMap;
+
+	UInputComponent* InputComponent;
+
+	void (*PfButtonEventDelegate)(const FKey&) = nullptr;
+	void (*PfAxisEventDelegate)(const FKey&) = nullptr;
+
+	void ButtonEventCallback(const FKey& key) const
 	{
-		if (pfAxisEventDelegate != nullptr) {
-			pfAxisEventDelegate(key);
+		if (PfButtonEventDelegate != nullptr) {
+			PfButtonEventDelegate(key);
+		}
+	}
+
+	void AxisEventCallback(const FKey& key) const
+	{
+		if (PfAxisEventDelegate != nullptr) {
+			PfAxisEventDelegate(key);
 		}
 	}
 
 public:
-    void InitializeInput(UObject* contextObject)
+	void InitializeInput(UObject* ContextObject)
 	{
-		APlayerController* PC = UGameplayStatics::GetPlayerController(contextObject, 0);
+		APlayerController* PC = UGameplayStatics::GetPlayerController(ContextObject, 0);
 		if (PC) {
 
-			mInputComponent = NewObject<UInputComponent>(contextObject, UInputSettings::GetDefaultInputComponentClass());
-			mInputComponent->Priority = 10;
+			InputComponent = NewObject<UInputComponent>(ContextObject, UInputSettings::GetDefaultInputComponentClass());
+			InputComponent->Priority = 10;
 
-			PC->PushInputComponent(mInputComponent);
+			PC->PushInputComponent(InputComponent);
 
-			auto actionMappings = UInputSettings::GetInputSettings()->GetActionMappings();
-			for (int i = 0; i < actionMappings.Num(); i++)
+			auto ActionMappings = UInputSettings::GetInputSettings()->GetActionMappings();
+			for (int Idx = 0; Idx < ActionMappings.Num(); Idx++)
 			{
-				UInputSettings::GetInputSettings()->RemoveActionMapping(actionMappings[i]);
+				UInputSettings::GetInputSettings()->RemoveActionMapping(ActionMappings[Idx]);
 			}
 
-			auto axisMappings = UInputSettings::GetInputSettings()->GetAxisMappings();
-			for (int i = 0; i < axisMappings.Num(); i++)
+			auto AxisMappings = UInputSettings::GetInputSettings()->GetAxisMappings();
+			for (int Idx = 0; Idx < AxisMappings.Num(); Idx++)
 			{
-				UInputSettings::GetInputSettings()->RemoveAxisMapping(axisMappings[i]);
+				UInputSettings::GetInputSettings()->RemoveAxisMapping(AxisMappings[Idx]);
 			}
 
-			TArray<FKey> allKeys;
-			EKeys::GetAllKeys(allKeys);
+			TArray<FKey> AllKeys;
+			EKeys::GetAllKeys(AllKeys);
 
-			for (int32 i = 0; i < allKeys.Num(); i++)
+			for (int32 i = 0; i < AllKeys.Num(); i++)
 			{
-				FKey currentKey = allKeys[i];
+				FKey CurrentKey = AllKeys[i];
 
-				if (currentKey.IsAxis1D()) {
+				if (CurrentKey.IsAxis1D()) {
 
-					mAxisMap.Add(currentKey.GetFName(), 0.0);
+					AxisMap.Add(CurrentKey.GetFName(), 0.0);
 
-					FInputAxisKeyMapping  AxisMap;
-					AxisMap.AxisName = currentKey.GetFName();
-					AxisMap.Key = currentKey;
-					UInputSettings::GetInputSettings()->AddAxisMapping(AxisMap);
+					FInputAxisKeyMapping  AxisKeyMapping;
+					AxisKeyMapping.AxisName = CurrentKey.GetFName();
+					AxisKeyMapping.Key = CurrentKey;
+					UInputSettings::GetInputSettings()->AddAxisMapping(AxisKeyMapping);
 
-					FInputAxisBinding AxisBinding(currentKey.GetFName());
+					FInputAxisBinding AxisBinding(CurrentKey.GetFName());
 					AxisBinding.bConsumeInput = true;
 					AxisBinding.bExecuteWhenPaused = false;
 
 					AxisBinding.AxisDelegate.GetDelegateForManualSet().BindLambda([=](float Value)
 						{
-							float oldValue = mAxisMap[currentKey.GetFName()];
+							float OldValue = AxisMap[CurrentKey.GetFName()];
 
-							if (!FMath::IsNearlyEqual(Value, oldValue, 0.0001f)) {
-								mAxisMap[currentKey.GetFName()] = Value;
-								AxisEventCallback(currentKey);
+							if (!FMath::IsNearlyEqual(Value, OldValue, 0.0001f)) {
+								AxisMap[CurrentKey.GetFName()] = Value;
+								AxisEventCallback(CurrentKey);
 							}
 						});
-					mInputComponent->AxisBindings.Add(MoveTemp(AxisBinding));
+					InputComponent->AxisBindings.Add(MoveTemp(AxisBinding));
 				}
 				else
 				{
-					FInputActionKeyMapping ActionMap;
-					ActionMap.ActionName = currentKey.GetFName();
-					ActionMap.Key = currentKey;
-					UInputSettings::GetInputSettings()->AddActionMapping(ActionMap);
+					FInputActionKeyMapping ActionKeyMapping;
+					ActionKeyMapping.ActionName = CurrentKey.GetFName();
+					ActionKeyMapping.Key = CurrentKey;
+					UInputSettings::GetInputSettings()->AddActionMapping(ActionKeyMapping);
 
-					mIsPressMap.Add(currentKey.GetFName(), false);
+					IsPressMap.Add(CurrentKey.GetFName(), false);
 
-					FInputActionBinding ABPressed(currentKey.GetFName(), IE_Pressed);
+					FInputActionBinding ABPressed(CurrentKey.GetFName(), IE_Pressed);
 					ABPressed.bConsumeInput = true;
 
 					ABPressed.ActionDelegate.GetDelegateWithKeyForManualSet().BindLambda([=](const FKey& Key)
 						{
-							mIsPressMap[Key.GetFName()] = true;
+							IsPressMap[Key.GetFName()] = true;
 							ButtonEventCallback(Key);
 						});
-					mInputComponent->AddActionBinding(MoveTemp(ABPressed));
+					InputComponent->AddActionBinding(MoveTemp(ABPressed));
 
-					FInputActionBinding ABReleased(currentKey.GetFName(), IE_Released);
+					FInputActionBinding ABReleased(CurrentKey.GetFName(), IE_Released);
 					ABReleased.bConsumeInput = true;
 					ABReleased.ActionDelegate.GetDelegateWithKeyForManualSet().BindLambda([=](const FKey& Key)
 						{
-							mIsPressMap[Key.GetFName()] = false;
+							IsPressMap[Key.GetFName()] = false;
 						});
-					mInputComponent->AddActionBinding(MoveTemp(ABReleased));
+					InputComponent->AddActionBinding(MoveTemp(ABReleased));
 				}
 			}
 
@@ -301,45 +304,46 @@ public:
 			UInputSettings::GetInputSettings()->SaveKeyMappings();
 		}
 	}
-    void ReleaseInput()
+
+	FORCEINLINE void ReleaseInput()
 	{
-		mInputComponent = nullptr;
+		InputComponent = nullptr;
 	}
 
-    void SetButtonEventCallback(void (*pf)(const FKey&))
+	FORCEINLINE void SetButtonEventCallback(void (*Pf)(const FKey&))
 	{
-		pfButtonEventDelegate = pf;
+		PfButtonEventDelegate = Pf;
 	}
 
-    void SetAxisEventCallback(void (*pf)(const FKey&))
+	FORCEINLINE void SetAxisEventCallback(void (*Pf)(const FKey&))
 	{
-		pfAxisEventDelegate = pf;
+		PfAxisEventDelegate = Pf;
 	}
 
-    bool IsPress(const uint32 keyCode) const
+	bool IsPress(const uint32 KeyCode) const
 	{
-		FKey key = FInputKeyManager::Get().GetKeyFromCodes(keyCode, keyCode);
-		return IsPress(key);
+		FKey Key = FInputKeyManager::Get().GetKeyFromCodes(KeyCode, KeyCode);
+		return IsPress(Key);
 	}
 
-    bool IsPress(const FKey& key) const
+	bool IsPress(const FKey& Key) const
 	{
-		if (!mIsPressMap.Contains(key.GetFName())) {
+		if (!IsPressMap.Contains(Key.GetFName())) {
 			return false;
 		}
 
-		return mIsPressMap[key.GetFName()];
+		return IsPressMap[Key.GetFName()];
 	}
 
-    float AxisValue(const FKey& key) const
+	float AxisValue(const FKey& Key) const
 	{
-		if (!mAxisMap.Contains(key.GetFName())) {
+		if (!AxisMap.Contains(Key.GetFName())) {
 			return 0.0;
 		}
 
-		return mAxisMap[key.GetFName()];
+		return AxisMap[Key.GetFName()];
 	}
 };
 
-bool UsInput::sIsReleased = false;
-UsInput* UsInput::sInstance = nullptr;
+bool UsInput::bIsReleased = false;
+UsInput* UsInput::Instance = nullptr;
